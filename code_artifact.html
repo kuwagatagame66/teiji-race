@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>定時退社チキンレース - 18:00:00を狙え！</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=M+PLUS+Rounded+1c:wght@400;700;800;900&family=Nunito:wght@700;900&display=swap');
+
+    body {
+      font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .font-digital {
+      font-family: 'Chakra Petch', 'Nunito', monospace;
+    }
+
+    /* ぷるぷる揺れるそわそわアニメーション */
+    @keyframes fidget {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-3px) rotate(-1.5deg); }
+      75% { transform: translateY(-1px) rotate(1.5deg); }
+    }
+
+    /* 緊張時のガタガタ震え */
+    @keyframes nervousShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-2px, 1px) rotate(-1deg); }
+      40% { transform: translate(2px, -1px) rotate(1deg); }
+      60% { transform: translate(-2px, -1px) rotate(0.5deg); }
+      80% { transform: translate(2px, 1px) rotate(-0.5deg); }
+    }
+
+    /* 歓喜のぴょんぴょんジャンプ */
+    @keyframes happyJump {
+      0%, 100% { transform: translateY(0) scale(1, 1); }
+      30% { transform: translateY(-18px) scale(0.96, 1.05); }
+      50% { transform: translateY(0) scale(1.05, 0.95); }
+      70% { transform: translateY(-8px) scale(0.98, 1.02); }
+    }
+
+    /* 魂が抜けるアニメーション */
+    @keyframes floatSoul {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      30% { opacity: 0.85; }
+      100% { transform: translateY(-45px) translateX(10px) scale(1.15); opacity: 0; }
+    }
+
+    /* 画面の緊迫パステルピンク脈動 */
+    @keyframes pinkPulse {
+      0%, 100% { box-shadow: inset 0 0 0 rgba(244, 63, 94, 0); }
+      50% { box-shadow: inset 0 0 50px rgba(251, 113, 133, 0.35); }
+    }
+
+    /* ボタンの弾むようなパルス */
+    @keyframes cutePunch {
+      0% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.4); }
+      50% { transform: scale(1.03); box-shadow: 0 16px 30px -5px rgba(244, 63, 94, 0.55); }
+      100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.4); }
+    }
+
+    .anim-fidget { animation: fidget 1.8s infinite ease-in-out; }
+    .anim-nervous { animation: nervousShake 0.12s infinite; }
+    .anim-happy { animation: happyJump 0.8s infinite ease-in-out; }
+    .pulse-danger-cute { animation: pinkPulse 0.6s infinite ease-in-out; }
+    .punch-cute-glow { animation: cutePunch 1.4s infinite ease-in-out; }
+    .anim-soul { animation: floatSoul 2s infinite ease-out; }
+
+    /* かわいい背景ドットパターン */
+    .bg-dots {
+      background-color: #fdfbf7;
+      background-image: radial-gradient(#f0e6dc 1.5px, transparent 1.5px), radial-gradient(#f0e6dc 1.5px, #fdfbf7 1.5px);
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
+    }
+
+    /* 画面揺れ演出 */
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      15% { transform: translate(-5px, 4px) rotate(-0.5deg); }
+      35% { transform: translate(5px, -3px) rotate(0.5deg); }
+      55% { transform: translate(-3px, 3px); }
+      75% { transform: translate(3px, -2px); }
+    }
+    .shake-impact { animation: screenShake 0.35s ease-out; }
+
+    /* 神速退社ダッシュ（画面外へロケット脱出） */
+    @keyframes rocketEscape {
+      0% { transform: translateX(0) scale(1); opacity: 1; }
+      20% { transform: translateX(-25px) scale(0.9, 1.1) skewX(10deg); }
+      100% { transform: translateX(450px) scale(1.3, 0.7) skewX(-20deg); opacity: 0; }
+    }
+    .anim-escape { animation: rocketEscape 0.45s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
+
+    /* ハンコ・スタンプ叩きつけ演出 */
+    @keyframes stampSlam {
+      0% { transform: scale(3.5) rotate(-25deg); opacity: 0; }
+      60% { transform: scale(0.9) rotate(-12deg); opacity: 1; }
+      80% { transform: scale(1.08) rotate(-14deg); }
+      100% { transform: scale(1) rotate(-12deg); opacity: 1; }
+    }
+    .anim-stamp { animation: stampSlam 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.3) forwards; }
+
+    /* 打刻時コミック風ポップアップ */
+    @keyframes popFloat {
+      0% { transform: scale(0.5) translateY(0); opacity: 0; }
+      40% { transform: scale(1.2) translateY(-15px); opacity: 1; }
+      100% { transform: scale(1) translateY(-35px); opacity: 0; }
+    }
+    .anim-comic-pop { animation: popFloat 0.7s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
+
+    /* 緊迫時の集中線オーバーレイ */
+    .speed-lines {
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(244, 63, 94, 0.08) 0deg 3deg,
+        transparent 3deg 12deg
+      );
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-dots text-slate-700 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-rose-200 selection:text-rose-800">
+
+  <!-- 特効キャンバス（紙吹雪・スパーク・集中線） -->
+  <canvas id="fxCanvas" class="fixed inset-0 pointer-events-none z-40 w-full h-full"></canvas>
+
+  <!-- 打刻インパクト白フラッシュ -->
+  <div id="flashOverlay" class="fixed inset-0 bg-white pointer-events-none z-50 opacity-0 transition-opacity duration-150"></div>
+
+  <!-- 緊迫フェーズの全画面集中線 -->
+  <div id="speedLinesOverlay" class="fixed inset-0 speed-lines pointer-events-none z-0 hidden"></div>
+
+  <!-- ヘッダー -->
+  <header class="w-full max-w-md mx-auto px-4 py-3 flex justify-between items-center z-20">
+    <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-sm border border-rose-100">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <h1 class="text-xs sm:text-sm font-black tracking-wide text-slate-700 flex items-center gap-1.5">
+        <i class="fa-solid fa-person-running text-rose-400"></i> 定時退社チキンレース
+      </h1>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <!-- サウンドトグル -->
+      <button id="soundToggleBtn" class="px-3 py-1.5 rounded-full bg-white/90 text-xs text-slate-600 hover:text-slate-800 border border-slate-200/80 shadow-sm flex items-center gap-1.5 transition active:scale-95">
+        <i id="soundIcon" class="fa-solid fa-volume-high text-emerald-500"></i>
+        <span id="soundText" class="text-[11px] font-bold">ON</span>
+      </button>
+      <!-- あそびかた -->
+      <button id="helpBtn" class="w-8 h-8 rounded-full bg-white/90 text-slate-600 hover:text-slate-800 border border-slate-200/80 shadow-sm flex items-center justify-center text-xs transition active:scale-95" title="あそびかた">
+        <i class="fa-solid fa-question text-rose-400 font-bold"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main id="gameContainer" class="flex-1 w-full max-w-md mx-auto px-4 py-2 flex flex-col justify-between items-center relative z-10">
+
+    <!-- 上部バッジ -->
+    <div class="text-center my-1">
+      <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-500 text-xs font-bold shadow-sm">
+        <i class="fa-regular fa-clock"></i> 目標時刻：18:00:00.000
+      </div>
+      <p id="subHintText" class="text-[11px] font-medium text-slate-600 mt-1">
+        1秒でも早いと「早退減給」😱 / 2.5秒超えで「緊急残業」💀
+      </p>
+    </div>
+
+    <!-- ゆるサラリーマン キャラクターステージ -->
+    <div class="relative w-44 h-44 flex items-center justify-center my-1">
+      <!-- 抜ける魂（残業時のみ表示） -->
+      <div id="soulElement" class="absolute -top-3 right-5 pointer-events-none hidden">
+        <svg class="w-10 h-10 fill-indigo-300/80 anim-soul" viewBox="0 0 24 24">
+          <path d="M12 2a6 6 0 0 0-6 6c0 4 3 6 3 8 0 1.5-1 2-2 2-1 0-1.5-.5-2-1 0 3 3 5 7 5s7-2 7-5c-0.5.5-1 1-2 1-1 0-2-.5-2-2 0-2 3-4 3-8a6 6 0 0 0-6-6z"/>
+        </svg>
+      </div>
+
+      <!-- サラリーマンSVGアバター -->
+      <div id="characterWrapper" class="w-full h-full flex items-center justify-center anim-fidget">
+        <svg id="characterSvg" class="w-40 h-40 filter drop-shadow-md transition-all duration-300" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- カバン（足元・定時待機用） -->
+          <rect id="briefcase" x="20" y="94" width="24" height="18" rx="4" fill="#a3704c"/>
+          <path d="M28 94V90C28 88.5 29.5 87 32 87C34.5 87 36 88.5 36 90V94" stroke="#784e31" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="32" cy="103" r="2" fill="#ffd166"/>
+
+          <!-- 体（白ワイシャツ & パステルブルーのネクタイ） -->
+          <ellipse cx="70" cy="98" rx="28" ry="24" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <!-- 腕 -->
+          <path id="leftArm" d="M46 92C40 96 38 104 43 110" stroke="#ffd7ba" stroke-width="6" stroke-linecap="round"/>
+          <path id="rightArm" d="M94 92C100 96 102 104 97 110" stroke="#ffd7ba" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- ネクタイ -->
+          <path id="tie" d="M68 85L72 85L74 104L70 108L66 104Z" fill="#38bdf8"/>
+          <polygon points="67,82 73,82 72,86 68,86" fill="#0284c7"/>
+
+          <!-- 足 -->
+          <rect x="56" y="116" width="10" height="12" rx="4" fill="#475569"/>
+          <rect x="74" y="116" width="10" height="12" rx="4" fill="#475569"/>
+
+          <!-- 頭 -->
+          <circle cx="70" cy="54" r="32" fill="#ffe5d9"/>
+
+          <!-- 髪の毛（やわらかい黒髪マッシュ風） -->
+          <path d="M40 50C38 35 48 24 70 24C92 24 102 35 100 50C97 45 92 41 85 41C77 41 73 45 70 43C67 45 63 41 55 41C48 41 43 45 40 50Z" fill="#2d3748"/>
+
+          <!-- ほっぺ（ピンク） -->
+          <circle id="blushLeft" cx="49" cy="62" r="5" fill="#fca5a5" opacity="0.6"/>
+          <circle id="blushRight" cx="91" cy="62" r="5" fill="#fca5a5" opacity="0.6"/>
+
+          <!-- 目 -->
+          <g id="eyesGroup">
+            <!-- 通常時（きょろきょろ黒目） -->
+            <ellipse id="eyeLeft" cx="58" cy="54" rx="3.5" ry="4.5" fill="#1e293b"/>
+            <ellipse id="eyeRight" cx="82" cy="54" rx="3.5" ry="4.5" fill="#1e293b"/>
+            <circle cx="59.5" cy="52.5" r="1.5" fill="#ffffff"/>
+            <circle cx="83.5" cy="52.5" r="1.5" fill="#ffffff"/>
+          </g>
+
+          <!-- 汗（緊張・失敗時用） -->
+          <path id="sweatDrop" class="hidden" d="M96 42C96 42 101 47 101 49C101 51 99.5 53 97.5 53C95.5 53 94 51 94 49C94 47 96 42 96 42Z" fill="#38bdf8"/>
+
+          <!-- 口 -->
+          <path id="mouth" d="M66 65C68 67 72 67 74 65" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- セリフ吹き出しバブル -->
+      <div id="speechBubble" class="absolute -top-3 -right-2 bg-white/95 border-2 border-rose-200 text-rose-600 px-3 py-1 rounded-2xl rounded-bl-none shadow-md text-[11px] font-bold tracking-tight animate-bounce">
+        早く帰りたい…
+      </div>
+    </div>
+
+    <!-- デジタルクロックカード -->
+    <div id="clockCard" class="w-full bg-white/90 backdrop-blur-md border-2 border-amber-100 rounded-3xl p-5 shadow-lg shadow-amber-500/5 relative overflow-hidden flex flex-col items-center transition-all duration-200">
+      <div class="w-full flex justify-between items-center text-[11px] text-slate-600 font-bold px-1 mb-1">
+        <span class="flex items-center gap-1.5">
+          <span id="systemDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span id="systemStatusText">スタンバイ中</span>
+        </span>
+        <span class="bg-amber-50 text-amber-600 px-2.5 py-0.5 rounded-full border border-amber-200/60 font-semibold text-[10px]">
+          終業打刻機
+        </span>
+      </div>
+
+      <!-- メインデジタル時計表示 -->
+      <div id="clockDisplay" class="font-digital text-4xl sm:text-5xl font-black tracking-tight text-slate-700 my-1 tabular-nums transition-colors duration-150">
+        17:59:50<span class="text-2xl sm:text-3xl text-slate-600">.000</span>
+      </div>
+
+      <!-- タイム差インジケータ -->
+      <div id="diffDisplay" class="h-5 text-xs font-bold tracking-wider text-slate-600">
+        ボタンを押してカウント開始！
+      </div>
+    </div>
+
+    <!-- アクション操作エリア -->
+    <div class="w-full flex flex-col items-center gap-3 my-2">
+      <!-- 難易度セレクター -->
+      <div class="w-full bg-white/80 backdrop-blur-sm p-1.5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col gap-1">
+        <div class="flex items-center justify-between px-1 text-[10px] font-bold text-slate-500">
+          <span><i class="fa-solid fa-briefcase text-slate-400"></i> 勤務先モード選択</span>
+          <span id="diffDescBadge" class="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100">
+            標準：妨害あり / 猶予2.5秒
+          </span>
+        </div>
+        <div id="difficultyGroup" class="grid grid-cols-3 gap-1.5">
+          <button type="button" data-diff="easy" class="diff-btn py-1.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-800 flex items-center justify-center gap-1 active:scale-95">
+            🌱 ホワイト
+          </button>
+          <button type="button" data-diff="normal" class="diff-btn py-1.5 px-2 rounded-xl text-xs font-bold transition bg-white shadow-sm border border-sky-200 text-sky-600 flex items-center justify-center gap-1 active:scale-95">
+            💼 標準
+          </button>
+          <button type="button" data-diff="hard" class="diff-btn py-1.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-800 flex items-center justify-center gap-1 active:scale-95">
+            🔥 ブラック
+          </button>
+        </div>
+      </div>
+
+      <!-- タイムカード打刻ボタングループ（相対位置指定） -->
+      <div class="w-full relative">
+        <!-- 打刻ヒット時のコミック風エフェクト文字コンテナ -->
+        <div id="comicPopContainer" class="absolute inset-x-0 -top-8 flex justify-center pointer-events-none z-40"></div>
+
+        <!-- タイムカード打刻ボタン -->
+        <button id="punchButton" disabled class="w-full h-24 sm:h-28 rounded-3xl bg-gradient-to-r from-rose-400 via-rose-500 to-pink-500 hover:from-rose-500 hover:to-pink-600 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none text-white font-black text-xl sm:text-2xl tracking-wider shadow-lg shadow-rose-300/50 border-b-4 border-rose-600 flex flex-col items-center justify-center gap-1 transition-all duration-100 relative group overflow-hidden">
+          <div class="flex items-center gap-2 relative z-10">
+            <i class="fa-solid fa-bell text-yellow-200 group-hover:rotate-12 transition-transform"></i>
+            <span id="punchButtonText">退社打刻！</span>
+          </div>
+          <span class="text-[11px] font-bold text-rose-100 tracking-normal bg-rose-600/30 px-3 py-0.5 rounded-full relative z-10">
+            画面タップ または SPACEキー
+          </span>
+          <!-- ボタン内部の光沢グローエフェクト -->
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        </button>
+
+        <!-- 上司からの妨害チャット通知ポップアップ（打刻ボタンを完全にブロック） -->
+        <div id="interruptionOverlay" class="absolute inset-0 z-30 flex items-center justify-center hidden">
+          <div id="bossPopup" class="w-full h-full bg-white/95 border-2 border-rose-400 rounded-3xl shadow-xl px-4 py-2 flex items-center justify-between gap-3 backdrop-blur-md animate-bounce ring-4 ring-rose-200">
+            <div class="w-11 h-11 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-600 text-xl shrink-0 shadow-inner">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div class="flex-1 min-w-0 pr-1">
+              <div class="flex items-center gap-1.5 mb-0.5">
+                <span class="text-xs font-black text-slate-800">部長</span>
+                <span class="text-[10px] font-bold text-rose-500 bg-rose-100 px-1.5 py-0.5 rounded-full animate-pulse">至急！</span>
+              </div>
+              <p id="bossMessage" class="text-[11px] font-bold text-slate-700 leading-tight line-clamp-2">
+                「ちょっと今いいかな？ 来期の予算案について至急…」
+              </p>
+            </div>
+            <button id="closePopupBtn" class="shrink-0 bg-rose-500 hover:bg-rose-600 active:scale-95 text-white font-black text-xs px-3.5 py-2.5 rounded-2xl shadow-md border-b-2 border-rose-700 flex flex-col items-center justify-center gap-0.5 transition cursor-pointer">
+              <span class="text-sm font-black leading-none">✕</span>
+              <span class="text-[10px] font-bold leading-tight">閉じる</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ゲームスタートボタン -->
+      <button id="startRaceBtn" class="w-full py-3.5 rounded-2xl bg-emerald-400 hover:bg-emerald-500 text-white font-black text-sm tracking-wide shadow-md shadow-emerald-200 border-b-4 border-emerald-600 flex items-center justify-center gap-2 transition active:scale-95">
+        <i class="fa-solid fa-play"></i> レーススタート！（17:59:50〜）
+      </button>
+    </div>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="w-full text-center py-2.5 text-[11px] font-medium text-slate-600">
+    定時退社チキンレース 🍀 今日も笑顔でおつかれさま！
+  </footer>
+
+  <!-- リザルトモーダル -->
+  <div id="resultModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-sm bg-white border-2 border-rose-100 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center relative overflow-hidden">
+      <!-- 特大承認/残業スタンプ（結果発表時にドカンと叩きつけられる） -->
+      <div id="resultStamp" class="absolute top-7 right-3 pointer-events-none border-4 border-double rounded-2xl px-3 py-1 font-black text-xl tracking-widest uppercase shadow-md select-none hidden z-20">
+        定時退社
+      </div>
+
+      <!-- ランクバッジ -->
+      <div id="rankBadge" class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-300 to-yellow-200 text-slate-800 font-black text-4xl flex items-center justify-center shadow-md mb-2 border-4 border-white transition-transform">
+        S
+      </div>
+
+      <h2 id="resultTitle" class="text-xl font-black text-slate-800 mb-0.5">
+        定時退社 大成功！
+      </h2>
+      <p id="resultRankName" class="text-xs font-black text-emerald-500 tracking-wide mb-3">
+        称号：神速の退社スナイパー
+      </p>
+
+      <!-- 結果カード -->
+      <div class="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 mb-4 space-y-1.5">
+        <div class="flex justify-between items-center text-xs text-slate-500 font-bold">
+          <span>打刻タイム</span>
+          <span id="finalTimestamp" class="font-mono text-sm font-black text-slate-800">18:00:00.042</span>
+        </div>
+        <div class="flex justify-between items-center text-xs text-slate-500 font-bold pt-1.5 border-t border-slate-200">
+          <span>18:00:00との差</span>
+          <span id="finalDiff" class="font-mono text-base font-black text-emerald-500">+0.042 秒</span>
+        </div>
+        <p class="text-[11px] text-slate-600 text-left pt-1.5 leading-relaxed border-t border-slate-200 font-medium" id="resultComment">
+          上司が口を開きかけた瞬間にタイムカードを叩き込み、風のように去っていった。
+        </p>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="w-full flex flex-col gap-2">
+        <button id="shareXBtn" class="w-full py-3 px-4 rounded-2xl bg-slate-900 hover:bg-black text-white font-black text-xs tracking-wide shadow-md flex items-center justify-center gap-2 transition active:scale-95">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          結果をX（Twitter）でシェア
+        </button>
+
+        <button id="retryBtn" class="w-full py-2.5 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center justify-center gap-1.5 active:scale-95">
+          <i class="fa-solid fa-rotate-right"></i> もう1回あそぶ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- あそびかたモーダル -->
+  <div id="helpModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-xs bg-white border-2 border-rose-200 rounded-3xl p-5 shadow-2xl text-slate-700 text-center relative">
+      <!-- 閉じるボタン（追加） -->
+      <button id="closeHelpBtn" class="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 flex items-center justify-center text-xs font-bold transition active:scale-95">
+        ✕
+      </button>
+      <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center text-xl mx-auto mb-2">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <h3 class="font-black text-base text-slate-800 mb-2">あそびかた</h3>
+      <div class="text-xs space-y-2 text-slate-600 text-left leading-relaxed font-medium bg-rose-50/50 p-3 rounded-2xl">
+        <p>⏰ <strong class="text-rose-500">18:00:00.000</strong> ジャストに「退社打刻」を押そう！</p>
+        <p>🚨 18:00:00 より前だと<strong class="text-rose-500">早退扱い（大失敗）</strong>！</p>
+        <p>💀 18:00:02.500 を過ぎると上司に捕まり<strong class="text-indigo-500">緊急残業確定</strong>！</p>
+        <p>💬 途中で飛んでくる上司のチャット通知は「✕」ですぐ消そう！</p>
+      </div>
+      <button id="helpOkBtn" class="w-full mt-3 py-2.5 bg-rose-400 hover:bg-rose-500 rounded-xl text-xs font-black text-white shadow-md shadow-rose-200 transition active:scale-95">
+        わかった！
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+     * ポップでかわいいWeb Audio音響エンジン
+     * ============================================================ */
+    class CuteSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+        this.tensionOsc = null;
+        this.tensionGain = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      // 緊迫ライザー音（17:59:58〜18:00:00にかけて高まる緊張のうねり音）
+      startTensionRiser() {
+        if (this.muted || !this.ctx || this.tensionOsc) return;
+        try {
+          const now = this.ctx.currentTime;
+          this.tensionOsc = this.ctx.createOscillator();
+          this.tensionGain = this.ctx.createGain();
+          this.tensionOsc.type = 'triangle';
+          this.tensionOsc.frequency.setValueAtTime(180, now);
+          this.tensionOsc.frequency.exponentialRampToValueAtTime(700, now + 2.0);
+          this.tensionGain.gain.setValueAtTime(0.01, now);
+          this.tensionGain.gain.linearRampToValueAtTime(0.09, now + 1.8);
+          this.tensionOsc.connect(this.tensionGain);
+          this.tensionGain.connect(this.ctx.destination);
+          this.tensionOsc.start(now);
+        } catch(e) {}
+      }
+
+      stopTensionRiser() {
+        if (this.tensionOsc) {
+          try {
+            this.tensionGain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+            this.tensionOsc.stop(this.ctx.currentTime + 0.06);
+          } catch(e) {}
+          this.tensionOsc = null;
+          this.tensionGain = null;
+        }
+      }
+
+      // 打刻インパクト音（爽快な重低音アタック ＋ レジスター風のチリン音）
+      playPunchImpact() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        // 低音キック
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(35, now + 0.18);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.18);
+
+        // クリック金属アタック
+        const snap = this.ctx.createOscillator();
+        const snapGain = this.ctx.createGain();
+        snap.type = 'triangle';
+        snap.frequency.setValueAtTime(1400, now);
+        snap.frequency.exponentialRampToValueAtTime(200, now + 0.06);
+        snapGain.gain.setValueAtTime(0.2, now);
+        snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+        snap.connect(snapGain);
+        snapGain.connect(this.ctx.destination);
+        snap.start(now);
+        snap.stop(now + 0.06);
+      }
+
+      // スタンプ叩きつけ音（「ドンッ！」）
+      playStampSlam() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(130, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.22);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      }
+
+      // 上司ポップアップのピロリン通知音
+      playPopupAlert() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        [659.25, 880].forEach((freq, i) => { // E5 -> A5
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.07);
+          gain.gain.setValueAtTime(0.12, now + i * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.15);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.07);
+          osc.stop(now + i * 0.07 + 0.15);
+        });
+      }
+
+      // 成功ファンファーレ（かわいいメジャーコード）
+      playSuccess(rank) {
+        if (this.muted || !this.ctx) return;
+        const notes = (rank === 'S+' || rank === 'S')
+          ? [523.25, 659.25, 783.99, 1046.50] // C5, E5, G5, C6
+          : [440, 554.37, 659.25]; // A4, C#5, E5
+        
+        notes.forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const startTime = this.ctx.currentTime + (i * 0.08);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0.18, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.42);
+        });
+      }
+
+      // 残念音（ボヨヨ〜ン/沈む音）
+      playFail() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.4);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(now + 0.4);
+      }
+    }
+
+    /* ============================================================
+     * ゲーム状態管理 & キャラクタースイッチ
+     * ============================================================ */
+    const sound = new CuteSoundEngine();
+
+    /* ============================================================
+     * キャンバス特効エンジン（紙吹雪、星、スピードライン）
+     * ============================================================ */
+    class FXEngine {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.animId = null;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+      }
+
+      // クラッカー紙吹雪を大量放射
+      launchCelebrationConfetti(count = 90) {
+        const colors = ['#f43f5e', '#fb7185', '#38bdf8', '#34d399', '#facc15', '#a855f7', '#fb923c'];
+        const shapes = ['rect', 'circle', 'star'];
+        for (let i = 0; i < count; i++) {
+          const angle = Math.PI * 0.2 + Math.random() * Math.PI * 0.6; // 上向き扇形
+          const speed = 7 + Math.random() * 14;
+          this.particles.push({
+            x: this.width * 0.5 + (Math.random() - 0.5) * 80,
+            y: this.height * 0.55,
+            vx: Math.cos(angle) * (Math.random() > 0.5 ? speed : -speed),
+            vy: -Math.sin(angle) * speed,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            shape: shapes[Math.floor(Math.random() * shapes.length)],
+            size: 6 + Math.random() * 8,
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 12,
+            life: 1.0,
+            decay: 0.007 + Math.random() * 0.009
+          });
+        }
+        if (!this.animId) this.loop();
+      }
+
+      clear() {
+        this.particles = [];
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        if (this.animId) {
+          cancelAnimationFrame(this.animId);
+          this.animId = null;
+        }
+      }
+
+      loop() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // 重力
+          p.vx *= 0.985;
+          p.rotation += p.vRot;
+          p.life -= p.decay;
+
+          if (p.life <= 0 || p.y > this.height) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotation * Math.PI) / 180);
+          this.ctx.globalAlpha = Math.max(0, p.life);
+          this.ctx.fillStyle = p.color;
+
+          if (p.shape === 'rect') {
+            this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          } else if (p.shape === 'circle') {
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            this.ctx.fill();
+          } else {
+            // 星型
+            this.ctx.beginPath();
+            for (let s = 0; s < 5; s++) {
+              this.ctx.lineTo(Math.cos((18 + s * 72) * Math.PI / 180) * p.size, -Math.sin((18 + s * 72) * Math.PI / 180) * p.size);
+              this.ctx.lineTo(Math.cos((54 + s * 72) * Math.PI / 180) * (p.size / 2), -Math.sin((54 + s * 72) * Math.PI / 180) * (p.size / 2));
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+          }
+          this.ctx.restore();
+        }
+
+        if (this.particles.length > 0) {
+          this.animId = requestAnimationFrame(() => this.loop());
+        } else {
+          this.animId = null;
+        }
+      }
+    }
+
+    const BASE_TIME_OFFSET = 17 * 3600 + 59 * 60 + 50; // 17:59:50
+    const TARGET_TIME = 18 * 3600 + 0 * 60 + 0;        // 18:00:00
+
+    // 難易度プリセット定義
+    const DIFFICULTY_CONFIGS = {
+      easy: {
+        name: 'ホワイト企業',
+        deadline: 3.5,
+        popups: 0,
+        blindClock: false,
+        desc: 'ホワイト：妨害なし / 猶予たっぷり3.5秒',
+        descClass: 'text-emerald-600 bg-emerald-50 border-emerald-100',
+        activeBtnClass: 'bg-white shadow-sm border border-emerald-200 text-emerald-600 font-black'
+      },
+      normal: {
+        name: '標準企業',
+        deadline: 2.5,
+        popups: 1,
+        blindClock: false,
+        desc: '標準：妨害あり / 猶予2.5秒',
+        descClass: 'text-sky-600 bg-sky-50 border-sky-100',
+        activeBtnClass: 'bg-white shadow-sm border border-sky-200 text-sky-600 font-black'
+      },
+      hard: {
+        name: '超ブラック企業',
+        deadline: 1.2,
+        popups: 2,
+        blindClock: true,
+        desc: 'ブラック：57秒〜時計非表示・妨害連発 / 猶予1.2秒',
+        descClass: 'text-rose-600 bg-rose-50 border-rose-100',
+        activeBtnClass: 'bg-white shadow-sm border border-rose-200 text-rose-600 font-black'
+      }
+    };
+
+    let currentDifficulty = 'normal';
+    let isRunning = false;
+    let startTime = null;
+    let animFrameId = null;
+    let lastSecondTick = -1;
+    let popupTimeouts = [];
+
+    // DOM参照
+    const clockDisplay = document.getElementById('clockDisplay');
+    const diffDisplay = document.getElementById('diffDisplay');
+    const subHintText = document.getElementById('subHintText');
+    const diffDescBadge = document.getElementById('diffDescBadge');
+    const diffButtons = document.querySelectorAll('.diff-btn');
+    const systemDot = document.getElementById('systemDot');
+    const systemStatusText = document.getElementById('systemStatusText');
+    const punchButton = document.getElementById('punchButton');
+    const startRaceBtn = document.getElementById('startRaceBtn');
+    const clockCard = document.getElementById('clockCard');
+    const speechBubble = document.getElementById('speechBubble');
+    const characterWrapper = document.getElementById('characterWrapper');
+    const characterSvg = document.getElementById('characterSvg');
+    const eyesGroup = document.getElementById('eyesGroup');
+    const mouth = document.getElementById('mouth');
+    const sweatDrop = document.getElementById('sweatDrop');
+    const soulElement = document.getElementById('soulElement');
+    const leftArm = document.getElementById('leftArm');
+    const rightArm = document.getElementById('rightArm');
+    const interruptionOverlay = document.getElementById('interruptionOverlay');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    const bossMessage = document.getElementById('bossMessage');
+    const resultModal = document.getElementById('resultModal');
+    const rankBadge = document.getElementById('rankBadge');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultRankName = document.getElementById('resultRankName');
+    const finalTimestamp = document.getElementById('finalTimestamp');
+    const finalDiff = document.getElementById('finalDiff');
+    const resultComment = document.getElementById('resultComment');
+    const retryBtn = document.getElementById('retryBtn');
+    const shareXBtn = document.getElementById('shareXBtn');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundText = document.getElementById('soundText');
+    const helpBtn = document.getElementById('helpBtn');
+    const helpModal = document.getElementById('helpModal');
+    const closeHelpBtn = document.getElementById('closeHelpBtn');
+    const helpOkBtn = document.getElementById('helpOkBtn');
+    const fxCanvas = document.getElementById('fxCanvas');
+    const flashOverlay = document.getElementById('flashOverlay');
+    const speedLinesOverlay = document.getElementById('speedLinesOverlay');
+    const comicPopContainer = document.getElementById('comicPopContainer');
+    const resultStamp = document.getElementById('resultStamp');
+    const gameContainer = document.getElementById('gameContainer');
+
+    const fx = new FXEngine(fxCanvas);
+
+    // 部長の妨害セリフ集
+    const bossMessages = [
+      '「ちょっと今いいかな？ 来期の予算案について至急…」',
+      '「お疲れ様！あ、帰る前にこの書類だけハンコ押して！」',
+      '「田中くん、3分だけ緊急の相談乗ってくれる？」',
+      '「Slackのメンション見た？ クライアントから修正が…！」',
+      '「明日朝イチのプレゼン資料、ドラフト見せてくれる？」'
+    ];
+
+    // 難易度切り替え
+    function setDifficulty(diff) {
+      if (isRunning) return;
+      currentDifficulty = diff;
+      const cfg = DIFFICULTY_CONFIGS[diff];
+
+      // タブボタンスタイル更新
+      diffButtons.forEach(btn => {
+        btn.className = 'diff-btn py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 text-slate-500 hover:text-slate-700';
+        if (btn.dataset.diff === diff) {
+          btn.className = `diff-btn py-1.5 px-2 rounded-xl text-xs flex items-center justify-center gap-1 active:scale-95 ${cfg.activeBtnClass}`;
+        }
+      });
+
+      diffDescBadge.textContent = cfg.desc;
+      diffDescBadge.className = `text-[10px] font-semibold px-2 py-0.5 rounded-full border ${cfg.descClass}`;
+      subHintText.textContent = `1秒でも早いと「早退減給」😱 / ${cfg.deadline}秒超えで「緊急残業」💀`;
+    }
+
+    diffButtons.forEach(btn => {
+      btn.addEventListener('click', () => setDifficulty(btn.dataset.diff));
+    });
+
+    // サウンドトグル
+    soundToggleBtn.addEventListener('click', () => {
+      sound.init();
+      sound.muted = !sound.muted;
+      if (sound.muted) {
+        soundIcon.className = 'fa-solid fa-volume-xmark text-rose-400';
+        soundText.textContent = 'OFF';
+      } else {
+        soundIcon.className = 'fa-solid fa-volume-high text-emerald-500';
+        soundText.textContent = 'ON';
+      }
+    });
+
+    // ヘルプモーダル
+    if (helpBtn) {
+      helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+    }
+    if (closeHelpBtn) {
+      closeHelpBtn.addEventListener('click', () => helpModal.classList.add('hidden'));
+    }
+    if (helpOkBtn) {
+      helpOkBtn.addEventListener('click', () => helpModal.classList.add('hidden'));
+    }
+    if (helpModal) {
+      // 背景クリックでも閉じられるように設定
+      helpModal.addEventListener('click', (e) => {
+        if (e.target === helpModal) helpModal.classList.add('hidden');
+      });
+    }
+
+    // サラリーマンの表情 & ポーズ変更関数
+    function setCharacterMood(mood) {
+      // クラスのリセット
+      characterWrapper.className = 'w-full h-full flex items-center justify-center';
+      sweatDrop.classList.add('hidden');
+      soulElement.classList.add('hidden');
+
+      if (mood === 'idle') {
+        characterWrapper.classList.add('anim-fidget');
+        speechBubble.textContent = '早く帰りたい…';
+        speechBubble.className = 'absolute -top-3 -right-2 bg-white/95 border-2 border-rose-200 text-rose-500 px-3 py-1 rounded-2xl rounded-bl-none shadow-md text-[11px] font-bold tracking-tight animate-bounce';
+        // 目：通常
+        eyesGroup.innerHTML = `
+          <ellipse cx="58" cy="54" rx="3.5" ry="4.5" fill="#1e293b"/>
+          <ellipse cx="82" cy="54" rx="3.5" ry="4.5" fill="#1e293b"/>
+          <circle cx="59.5" cy="52.5" r="1.5" fill="#ffffff"/>
+          <circle cx="83.5" cy="52.5" r="1.5" fill="#ffffff"/>
+        `;
+        mouth.setAttribute('d', 'M66 65C68 67 72 67 74 65');
+        leftArm.setAttribute('d', 'M46 92C40 96 38 104 43 110');
+        rightArm.setAttribute('d', 'M94 92C100 96 102 104 97 110');
+      } else if (mood === 'nervous') {
+        characterWrapper.classList.add('anim-nervous');
+        sweatDrop.classList.remove('hidden');
+        speechBubble.textContent = 'うおおお定時来る…！';
+        speechBubble.className = 'absolute -top-3 -right-2 bg-amber-50 border-2 border-amber-300 text-amber-600 px-3 py-1 rounded-2xl rounded-bl-none shadow-md text-[11px] font-bold tracking-tight animate-pulse';
+        // 目：まんまる見開き
+        eyesGroup.innerHTML = `
+          <circle cx="58" cy="54" r="5.5" fill="#1e293b"/>
+          <circle cx="82" cy="54" r="5.5" fill="#1e293b"/>
+          <circle cx="59" cy="52" r="2" fill="#ffffff"/>
+          <circle cx="83" cy="52" r="2" fill="#ffffff"/>
+        `;
+        mouth.setAttribute('d', 'M67 67C67 63 73 63 73 67Z');
+      } else if (mood === 'happy') {
+        characterWrapper.classList.add('anim-happy');
+        speechBubble.textContent = 'おつかれさまでしたー！✨';
+        speechBubble.className = 'absolute -top-4 -right-2 bg-emerald-50 border-2 border-emerald-300 text-emerald-600 px-3 py-1 rounded-2xl rounded-bl-none shadow-md text-[11px] font-black tracking-tight animate-bounce';
+        // 目：にっこり笑顔 (^^)
+        eyesGroup.innerHTML = `
+          <path d="M53 55C55 50 61 50 63 55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M77 55C79 50 85 50 87 55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" fill="none"/>
+        `;
+        mouth.setAttribute('d', 'M65 64C65 70 75 70 75 64Z');
+        // 両手を上げてバンザイ
+        leftArm.setAttribute('d', 'M46 90C36 78 30 70 28 65');
+        rightArm.setAttribute('d', 'M94 90C104 78 110 70 112 65');
+      } else if (mood === 'dead') {
+        soulElement.classList.remove('hidden');
+        speechBubble.textContent = '残業…うそだろ…';
+        speechBubble.className = 'absolute -top-3 -right-2 bg-slate-100 border-2 border-slate-300 text-slate-500 px-3 py-1 rounded-2xl rounded-bl-none shadow-md text-[11px] font-bold tracking-tight';
+        // 目：バツ印 (××)
+        eyesGroup.innerHTML = `
+          <path d="M54 51L62 59M62 51L54 59" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+          <path d="M78 51L86 59M86 51L78 59" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+        `;
+        mouth.setAttribute('d', 'M66 68C68 64 72 64 74 68');
+        // 腕をだらんと下げる
+        leftArm.setAttribute('d', 'M46 92C44 105 44 115 44 122');
+        rightArm.setAttribute('d', 'M94 92C96 105 96 115 96 122');
+      }
+    }
+
+    // レース開始
+    function startRace() {
+      sound.init();
+      sound.stopTensionRiser();
+      fx.clear();
+      isRunning = true;
+      startTime = performance.now();
+      lastSecondTick = -1;
+
+      setCharacterMood('idle');
+      characterWrapper.classList.remove('anim-escape');
+      speedLinesOverlay.classList.add('hidden');
+      comicPopContainer.innerHTML = '';
+      resultStamp.classList.add('hidden');
+
+      const cfg = DIFFICULTY_CONFIGS[currentDifficulty];
+
+      // UI初期化
+      startRaceBtn.classList.add('hidden');
+      diffButtons.forEach(btn => btn.disabled = true);
+      punchButton.disabled = false;
+      punchButton.classList.add('punch-cute-glow');
+      systemDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+      systemStatusText.textContent = '計測中... 集中！';
+      diffDisplay.textContent = `ターゲット：18:00:00.000 (${cfg.name})`;
+      diffDisplay.className = 'h-5 text-xs font-bold tracking-wider text-slate-600';
+      clockDisplay.className = 'font-digital text-4xl sm:text-5xl font-black tracking-tight text-slate-700 my-1 tabular-nums';
+
+      // 妨害ポップアップスケジュール
+      popupTimeouts.forEach(id => clearTimeout(id));
+      popupTimeouts = [];
+
+      if (cfg.popups === 1) {
+        // 標準：1回 (70%の確率)
+        if (Math.random() < 0.75) {
+          const delay = 3800 + Math.random() * 3200; // 17:59:53.8 〜 17:59:57.0
+          popupTimeouts.push(setTimeout(() => { if (isRunning) triggerBossPopup(); }, delay));
+        }
+      } else if (cfg.popups >= 2) {
+        // ブラック：2回確実
+        popupTimeouts.push(setTimeout(() => { if (isRunning) triggerBossPopup(); }, 3200));
+        popupTimeouts.push(setTimeout(() => { if (isRunning) triggerBossPopup(); }, 6800));
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // 上司のチャット妨害出現
+    function triggerBossPopup() {
+      const msg = bossMessages[Math.floor(Math.random() * bossMessages.length)];
+      bossMessage.textContent = msg;
+      interruptionOverlay.classList.remove('hidden');
+      sound.playPopupAlert();
+    }
+
+    closePopupBtn.addEventListener('click', () => {
+      interruptionOverlay.classList.add('hidden');
+    });
+
+    // メインループ
+    function gameLoop(now) {
+      if (!isRunning) return;
+
+      const elapsedSec = (now - startTime) / 1000;
+      const currentVirtualTime = BASE_TIME_OFFSET + elapsedSec;
+      const diffToTarget = currentVirtualTime - TARGET_TIME;
+
+      // 時刻フォーマット
+      const hours = Math.floor(currentVirtualTime / 3600);
+      const minutes = Math.floor((currentVirtualTime % 3600) / 60);
+      const seconds = Math.floor(currentVirtualTime % 60);
+      const milliseconds = Math.floor((currentVirtualTime % 1) * 1000);
+
+      const hStr = String(hours).padStart(2, '0');
+      const mStr = String(minutes).padStart(2, '0');
+      const sStr = String(seconds).padStart(2, '0');
+      const msStr = String(milliseconds).padStart(3, '0');
+
+      const cfg = DIFFICULTY_CONFIGS[currentDifficulty];
+
+      // ブラック企業モード専用：17:59:57以降は時計が「??:??:??」にブラインド化
+      if (cfg.blindClock && currentVirtualTime >= TARGET_TIME - 3.0) {
+        clockDisplay.innerHTML = `17:59:<span class="text-rose-500 font-black animate-pulse">??</span><span class="text-2xl sm:text-3xl text-rose-400">.???</span>`;
+      } else {
+        clockDisplay.innerHTML = `${hStr}:${mStr}:${sStr}<span class="text-2xl sm:text-3xl text-slate-600">.${msStr}</span>`;
+      }
+
+      // 17:59:58 以降の緊迫フェーズ
+      if (currentVirtualTime >= TARGET_TIME - 2.0 && currentVirtualTime < TARGET_TIME) {
+        document.body.classList.add('pulse-danger-cute');
+        speedLinesOverlay.classList.remove('hidden');
+        clockDisplay.classList.add('text-rose-500');
+        systemDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400 animate-ping';
+        systemStatusText.textContent = cfg.blindClock ? '体内時計を信じろ！！' : 'もうすぐ定時！！';
+        setCharacterMood('nervous');
+        sound.startTensionRiser();
+      }
+
+      // 18:00:00 到達以降
+      if (currentVirtualTime >= TARGET_TIME) {
+        systemStatusText.textContent = '早く押してーー！！';
+        sound.stopTensionRiser();
+      }
+
+      // 許容秒数超えで強制残業
+      if (diffToTarget > cfg.deadline) {
+        finishRace(diffToTarget, currentVirtualTime, true);
+        return;
+      }
+
+      animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // 打刻
+    function punchTimecard() {
+      if (!isRunning) return;
+      // ポップアップが出ている間は打刻させない
+      if (!interruptionOverlay.classList.contains('hidden')) return;
+
+      // 画面揺れ ＆ 白フラッシュのインパクト演出
+      gameContainer.classList.remove('shake-impact');
+      void gameContainer.offsetWidth; // リフロー強制
+      gameContainer.classList.add('shake-impact');
+
+      flashOverlay.style.opacity = '0.55';
+      setTimeout(() => { flashOverlay.style.opacity = '0'; }, 60);
+
+      sound.playPunchImpact();
+
+      const now = performance.now();
+      const elapsedSec = (now - startTime) / 1000;
+      const currentVirtualTime = BASE_TIME_OFFSET + elapsedSec;
+      const diffToTarget = currentVirtualTime - TARGET_TIME;
+
+      // コミック風打刻テキストのポップ演出（JUST! / SAFE! / NOOO!）
+      showComicPop(diffToTarget);
+
+      finishRace(diffToTarget, currentVirtualTime, false);
+    }
+
+    // 打刻位置にコミック文字をポップ
+    function showComicPop(diff) {
+      let text = 'SAFE!';
+      let colorClass = 'text-sky-500';
+      if (diff < 0) {
+        text = 'TOO EARLY!';
+        colorClass = 'text-rose-500';
+      } else if (diff <= 0.08) {
+        text = 'JUST 18:00!! ✨';
+        colorClass = 'text-amber-500';
+      } else if (diff <= 0.3) {
+        text = 'PERFECT!! 💨';
+        colorClass = 'text-emerald-500';
+      } else if (diff > 2.5) {
+        text = 'OVERTIME... 💀';
+        colorClass = 'text-slate-600';
+      }
+
+      comicPopContainer.innerHTML = `
+        <div class="anim-comic-pop text-2xl sm:text-3xl font-black ${colorClass} tracking-wider filter drop-shadow-md bg-white/90 px-4 py-1 rounded-full border-2 border-current">
+          ${text}
+        </div>
+      `;
+    }
+
+    // 終了処理
+    function finishRace(diff, virtualTime, isOvertimeForced) {
+      isRunning = false;
+      cancelAnimationFrame(animFrameId);
+      sound.stopTensionRiser();
+      speedLinesOverlay.classList.add('hidden');
+      popupTimeouts.forEach(id => clearTimeout(id));
+      popupTimeouts = [];
+      document.body.classList.remove('pulse-danger-cute');
+      punchButton.disabled = true;
+      punchButton.classList.remove('punch-cute-glow');
+      diffButtons.forEach(btn => btn.disabled = false);
+      interruptionOverlay.classList.add('hidden');
+
+      const hours = Math.floor(virtualTime / 3600);
+      const minutes = Math.floor((virtualTime % 3600) / 60);
+      const seconds = Math.floor(virtualTime % 60);
+      const milliseconds = Math.floor((virtualTime % 1) * 1000);
+      const timeStr = `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}.${String(milliseconds).padStart(3,'0')}`;
+
+      const cfg = DIFFICULTY_CONFIGS[currentDifficulty];
+      const result = evaluateResult(diff, isOvertimeForced, cfg);
+
+      // キャラクターの演出 & サウンド
+      if (result.rank === 'F') {
+        setCharacterMood('dead');
+        sound.playFail();
+      } else {
+        setCharacterMood('happy');
+        // 大成功時はロケットのように猛ダッシュで画面外へ退社！
+        setTimeout(() => {
+          characterWrapper.classList.add('anim-escape');
+        }, 200);
+        // 豪華なクラッカー紙吹雪を大量射出！
+        fx.launchCelebrationConfetti(result.rank === 'S+' ? 120 : 80);
+        sound.playSuccess(result.rank);
+      }
+
+      // 特大スタンプの準備
+      resultStamp.className = `absolute top-6 right-3 pointer-events-none border-4 border-double rounded-2xl px-3 py-1 font-black text-xl tracking-widest uppercase shadow-md select-none anim-stamp z-20 ${result.stampClass}`;
+      resultStamp.textContent = result.stampText;
+      resultStamp.classList.remove('hidden');
+
+      // リザルトモーダル更新
+      rankBadge.textContent = result.rank;
+      rankBadge.className = `w-20 h-20 rounded-3xl ${result.rankBg} font-black text-4xl flex items-center justify-center shadow-md mb-2 border-4 border-white`;
+      resultTitle.textContent = result.title;
+      resultTitle.className = `text-xl font-black ${result.textColor} mb-0.5`;
+      resultRankName.textContent = `[${cfg.name}] 称号：${result.rankName}`;
+      resultRankName.className = `text-xs font-black ${result.textColor} tracking-wide mb-3`;
+
+      finalTimestamp.textContent = timeStr;
+      finalDiff.textContent = (diff >= 0 ? `+${diff.toFixed(3)}` : diff.toFixed(3)) + ' 秒';
+      finalDiff.className = `font-mono text-base font-black ${result.textColor}`;
+      resultComment.textContent = result.comment;
+
+      // X共有リンク生成
+      const shareText = `【定時退社チキンレース (${cfg.name})】\n打刻時刻: ${timeStr} (${finalDiff.textContent})\n結果ランク: [${result.rank}]\n称号:「${result.rankName}」\n\n${result.shareQuote}\n#定時退社チキンレース #ブラウザゲーム\n`;
+      const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
+      shareXBtn.onclick = () => window.open(shareUrl, '_blank');
+
+      setTimeout(() => {
+        resultModal.classList.remove('hidden');
+        sound.playStampSlam();
+      }, 400);
+    }
+
+    // 結果評価
+    function evaluateResult(diff, isOvertimeForced, cfg) {
+      if (isOvertimeForced || diff > cfg.deadline) {
+        return {
+          rank: 'F',
+          rankBg: 'bg-indigo-100 text-indigo-700',
+          title: '緊急残業確定…（ちーん）',
+          textColor: 'text-indigo-600',
+          stampText: '残業 決定',
+          stampClass: 'text-indigo-600 border-indigo-400 bg-indigo-50/90',
+          rankName: '終電確定の社畜',
+          comment: `18:00:${cfg.deadline.toFixed(1)}を過ぎてしまい、部長に笑顔で肩を叩かれました。「残っててくれて助かるよ…！」`,
+          shareQuote: '背後の上司に気付けず緊急残業が確定しました…魂が抜けています。'
+        };
+      }
+
+      if (diff < 0) {
+        return {
+          rank: 'F',
+          rankBg: 'bg-rose-100 text-rose-700',
+          title: '早退（人事面談行き）',
+          textColor: 'text-rose-500',
+          stampText: '早退 減給',
+          stampClass: 'text-rose-600 border-rose-400 bg-rose-50/90',
+          rankName: 'あわてんぼうフライング社員',
+          comment: '定時前に堂々とタイムカードを押してしまい、人事部から「ちょっといい？」の呼び出しを食らいました。',
+          shareQuote: '早く帰りたすぎて定時前にフライング打刻してしまいました😭'
+        };
+      }
+
+      // 成功
+      if (diff <= 0.080) {
+        return {
+          rank: 'S+',
+          rankBg: 'bg-gradient-to-tr from-amber-300 via-rose-300 to-pink-300 text-slate-800',
+          title: '神速の定時退社！✨',
+          textColor: 'text-amber-500',
+          stampText: '神速 認定',
+          stampClass: 'text-amber-600 border-amber-400 bg-amber-50/95 ring-2 ring-amber-300',
+          rankName: currentDifficulty === 'hard' ? '体内時計の超越者' : '神速の退社スナイパー',
+          comment: '奇跡のミリ秒打刻！上司のまばたき1回の間に退社完了。残された椅子だけがくるくる回っていた。',
+          shareQuote: `${cfg.name}で見事18:00ジャスト打刻！残像を残して颯爽と退社しました✨`
+        };
+      } else if (diff <= 0.250) {
+        return {
+          rank: 'S',
+          rankBg: 'bg-gradient-to-tr from-yellow-200 to-amber-300 text-slate-800',
+          title: 'パーフェクト定時退社！🎉',
+          textColor: 'text-emerald-500',
+          stampText: '定時 承認',
+          stampClass: 'text-emerald-600 border-emerald-400 bg-emerald-50/90',
+          rankName: 'ノー残業レジェンド',
+          comment: '完璧な立ち回り！上司が「あっ」と口を開くより早く、エレベーターの扉は静かに閉まった。',
+          shareQuote: `${cfg.name}でノー残業レジェンド達成！今日のご飯が美味しい〜！`
+        };
+      } else if (diff <= 0.650) {
+        return {
+          rank: 'A',
+          rankBg: 'bg-gradient-to-tr from-emerald-200 to-teal-300 text-slate-800',
+          title: 'ナイス定時退社！🌸',
+          textColor: 'text-emerald-500',
+          stampText: '退社 許可',
+          stampClass: 'text-emerald-600 border-emerald-400 bg-emerald-50/90',
+          rankName: '有給消化の達人',
+          comment: '無駄のない華麗な身のこなし。カバンを小脇に抱え、定時の鐘とともに笑顔で脱出成功！',
+          shareQuote: '見事な定時退社をキメました！定時のビール最高！'
+        };
+      } else if (diff <= 1.200) {
+        return {
+          rank: 'B',
+          rankBg: 'bg-gradient-to-tr from-sky-200 to-blue-300 text-slate-800',
+          title: 'ギリギリセーフ！💦',
+          textColor: 'text-sky-500',
+          stampText: '辛勝 承認',
+          stampClass: 'text-sky-600 border-sky-400 bg-sky-50/90',
+          rankName: '定時チキン野郎',
+          comment: '少しビビって打刻が遅れたけれどセーフ！上司の鋭い視線をギリギリ背中でかわして脱出。',
+          shareQuote: 'ちょっと手汗握ったけどギリギリ定時退社成功！'
+        };
+      } else {
+        return {
+          rank: 'C',
+          rankBg: 'bg-gradient-to-tr from-orange-200 to-rose-200 text-slate-800',
+          title: 'すべりこみ退社！',
+          textColor: 'text-orange-500',
+          stampText: '薄氷 合格',
+          stampClass: 'text-orange-600 border-orange-400 bg-orange-50/90',
+          rankName: '薄氷のサバイバー',
+          comment: '上司が「ちょっと…」と言いかけたその瞬間、ギリギリでカードリーダーをスワイプ！危なかった…！',
+          shareQuote: '上司が口を開きかけた瞬間に打刻してすべりこみ退社！'
+        };
+      }
+    }
+
+    // イベントバインド
+    punchButton.addEventListener('click', punchTimecard);
+    startRaceBtn.addEventListener('click', startRace);
+
+    retryBtn.addEventListener('click', () => {
+      fx.clear();
+      resultStamp.classList.add('hidden');
+      characterWrapper.classList.remove('anim-escape');
+      comicPopContainer.innerHTML = '';
+      speedLinesOverlay.classList.add('hidden');
+      resultModal.classList.add('hidden');
+      startRaceBtn.classList.remove('hidden');
+      diffButtons.forEach(btn => btn.disabled = false);
+      setCharacterMood('idle');
+      clockDisplay.innerHTML = '17:59:50<span class="text-2xl sm:text-3xl text-slate-600">.000</span>';
+      diffDisplay.textContent = 'ボタンを押してカウント開始！';
+      clockDisplay.className = 'font-digital text-4xl sm:text-5xl font-black tracking-tight text-slate-700 my-1 tabular-nums';
+      systemDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+      systemStatusText.textContent = 'スタンバイ中';
+    });
+
+    // スペースキー操作
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (isRunning) {
+          // 上司のポップアップが出ている場合はスペースキーで閉じる
+          if (!interruptionOverlay.classList.contains('hidden')) {
+            interruptionOverlay.classList.add('hidden');
+            return;
+          }
+          punchTimecard();
+        } else if (!resultModal.classList.contains('hidden')) {
+          retryBtn.click();
+        } else if (!startRaceBtn.classList.contains('hidden')) {
+          startRace();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
